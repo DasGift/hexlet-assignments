@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 // BEGIN
-public static boolean scrabble(String symbols, String str) {
+
+//END
+
+public class App {
+    public static boolean scrabble(String symbols, String str) {
         int length = str.length();
         String[] letters = symbols.split("");
         List coll = new ArrayList(Arrays.asList(letters));
@@ -21,5 +25,5 @@ public static boolean scrabble(String symbols, String str) {
         }
 
         return true;
+    }
 }
-//END
