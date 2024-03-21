@@ -46,7 +46,7 @@ public class FileKV implements KeyValueStorage {
 
     private void loadFromFile() {
         try {
-            fileContent = Files.readString(Paths.get(filePath));
+            String fileContent = Files.readString(Paths.get(filePath));
             storage = Utils.unserialize(fileContent);
         } catch (IOException e) {
             e.printStackTrace();
