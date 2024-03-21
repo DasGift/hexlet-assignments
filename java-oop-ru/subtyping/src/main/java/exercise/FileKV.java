@@ -45,20 +45,12 @@ public class FileKV implements KeyValueStorage {
     }
 
     private void saveToFile() {
-        try {
-            Utils.writeFile(filePath, Utils.serialize(storage));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Utils.writeFile(filePath, Utils.serialize(storage));
     }
 
     private void loadFromFile() {
-        try {
-            String fileContent = Files.readString(Paths.get(filePath));
-            storage = Utils.unserialize(fileContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String fileContent = Files.readString(Paths.get(filePath));
+        storage = Utils.unserialize(fileContent);
     }
 }
 // END
