@@ -24,6 +24,23 @@ class FileKVTest {
     }
 
     // BEGIN
-    
+    @Test
+    void testFileKVOperations() throws Exception {
+        String testFilePath = "src/test/resources/testFileKV.json";
+        KeyValueStorage storage = new FileKV(testFilePath, Map.of("initialKey", "initialValue"));
+
+        storage.set("key", "value");
+        assertEquals("value", storage.get("key", "default"));
+
+        storage.unset("initialKey");
+        assertNull(storage.get("initialKey", null));
+
+        // Проверка сохранения в файл
+        String fileContent = Files.readString(Paths.get(testFilePath));
+        assertTrue(fileContent.contains("\"key\":\"value\""));
+        assertFalse(fileContent.contains("\"initialKey\""));
+
+        Files.deleteIfExists(Paths.get(testFilePath)); // Удалите тестовый файл после выполнения теста
+    }
     // END
 }
