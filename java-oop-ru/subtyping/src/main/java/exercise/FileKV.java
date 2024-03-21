@@ -50,9 +50,6 @@ public class FileKV implements KeyValueStorage {
             storage = Utils.unserialize(fileContent);
         } catch (IOException e) {
             e.printStackTrace();
-            // Здесь вы можете обработать исключение, например, вернуть какое-то значение по умолчанию
-            // или пробросить другое исключение
-            fileContent = ""; // Временное значение, в зависимости от вашей логики можно определить другое
         }
     }
 }
