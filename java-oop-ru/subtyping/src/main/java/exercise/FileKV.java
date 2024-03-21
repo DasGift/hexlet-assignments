@@ -14,12 +14,8 @@ public class FileKV implements KeyValueStorage {
 
     public FileKV(String filePath, Map<String, String> initialData) {
         this.filePath = filePath;
-        try {
-            Utils.writeFile(filePath, Utils.serialize(initialData));
-            this.storage.putAll(initialData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Utils.writeFile(filePath, Utils.serialize(initialData));
+        this.storage.putAll(initialData);
     }
 
     @Override
