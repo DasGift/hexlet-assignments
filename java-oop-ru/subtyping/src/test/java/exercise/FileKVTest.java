@@ -8,7 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 // BEGIN
-
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Map;
 // END
 
 
@@ -25,22 +27,20 @@ class FileKVTest {
 
     // BEGIN
     @Test
-    void testFileKVOperations() throws Exception {
-        String testFilePath = "src/test/resources/testFileKV.json";
-        KeyValueStorage storage = new FileKV(testFilePath, Map.of("initialKey", "initialValue"));
+    void fileKVTest() {
+        KeyValueStorage storage = new FileKV("src/test/resources/file", Map.of("key", "value"));
+        assertThat(storage.get("key2", "default")).isEqualTo("default");
+        assertThat(storage.get("key", "default")).isEqualTo("value");
 
-        storage.set("key", "value");
-        assertEquals("value", storage.get("key", "default"));
+        storage.set("key3", "value3");
+        storage.set("key", "10");
+        assertThat(storage.get("key3", "default")).isEqualTo("value3");
+        assertThat(storage.get("key", "default")).isEqualTo("10");
 
-        storage.unset("initialKey");
-        assertNull(storage.get("initialKey", null));
+        storage.unset("key");
+        assertThat(storage.get("key", "def")).isEqualTo("def");
 
-        // Проверка сохранения в файл
-        String fileContent = Files.readString(Paths.get(testFilePath));
-        assertTrue(fileContent.contains("\"key\":\"value\""));
-        assertFalse(fileContent.contains("\"initialKey\""));
-
-        Files.deleteIfExists(Paths.get(testFilePath)); // Удалите тестовый файл после выполнения теста
+        assertThat(storage.toMap()).isEqualTo(Map.of("key3", "value3"));
     }
     // END
 }
