@@ -7,50 +7,39 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileKV implements KeyValueStorage {
+class FileKV implements KeyValueStorage {
 
-    private Map<String, String> storage = new HashMap<>();
-    private String filePath;
+    private String filepath;
 
-    public FileKV(String filePath, Map<String, String> initialData) {
-        this.filePath = filePath;
-        Utils.writeFile(filePath, Utils.serialize(initialData));
-        this.storage.putAll(initialData);
+    FileKV(String filepath, Map<String, String> initial) {
+        this.filepath = filepath;
+        initial.entrySet().stream().forEach(entry -> set(entry.getKey(), entry.getValue()));
     }
 
-    @Override
     public void set(String key, String value) {
-        storage.put(key, value);
-        saveToFile();
+        String content = Utils.readFile(filepath);
+        Map<String, String> data = Utils.unserialize(content);
+        data.put(key, value);
+        Utils.writeFile(filepath, Utils.serialize(data));
     }
 
-    @Override
     public void unset(String key) {
-        storage.remove(key);
-        saveToFile();
+        String content = Utils.readFile(filepath);
+        Map<String, String> data = Utils.unserialize(content);
+        data.remove(key);
+        Utils.writeFile(filepath, Utils.serialize(data));
     }
 
-    @Override
     public String get(String key, String defaultValue) {
-        return storage.getOrDefault(key, defaultValue);
+        String content = Utils.readFile(filepath);
+        Map<String, String> data = Utils.unserialize(content);
+        return data.containsKey(key) ? data.get(key) : defaultValue;
     }
 
-    @Override
     public Map<String, String> toMap() {
-        return new HashMap<>(storage);
-    }
-
-    private void saveToFile() {
-        Utils.writeFile(filePath, Utils.serialize(storage));
-    }
-
-    private void loadFromFile() {
-        try {
-            String fileContent = Files.readString(Paths.get(filePath));
-            storage = Utils.unserialize(fileContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String content = Utils.readFile(filepath);
+        Map<String, String> data = Utils.unserialize(content);
+        return data;
     }
 }
 // END
