@@ -24,10 +24,3 @@ public class Car {
     }
 }
 // END
-class Car {
-    int id;
-    String brand;
-    String model;
-    String color;
-    User owner;
-}

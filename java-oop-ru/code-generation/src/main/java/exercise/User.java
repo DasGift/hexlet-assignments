@@ -11,9 +11,3 @@ public class User {
     int age;
 }
 // END
-class User {
-    int id;
-    String firstName;
-    String lastName;
-    int age;
-}
