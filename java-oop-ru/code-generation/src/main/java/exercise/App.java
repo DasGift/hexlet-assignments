@@ -2,24 +2,20 @@ package exercise;
 
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 // BEGIN
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-
 public class App {
 
-    public static void save(Path path, Car car) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonRepresentation = mapper.writeValueAsString(car);
-        Files.writeString(path, jsonRepresentation);
+    public static void save(Path filePath, Car instance) throws Exception {
+        String jsonRepresentation = instance.serialize();
+        Files.writeString(filePath, jsonRepresentation, StandardOpenOption.WRITE);
     }
 
-    public static Car extract(Path path) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonRepresentation = Files.readString(path);
-        return mapper.readValue(jsonRepresentation, Car.class);
+    public static Car extract(Path filePath) throws Exception {
+        String jsonRepresentation = Files.readString(filePath);
+        Car instance = Car.unserialize(jsonRepresentation);
+        return instance;
     }
 }
 // END
